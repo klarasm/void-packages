@@ -1,0 +1,20 @@
+# Template file for 'twin'
+pkgname=twin
+version=0.8.1
+revision=1
+build_style=gnu-configure
+hostmakedepends=""
+makedepends="libX11-devel libXpm-devel ncurses-devel zlib-devel gpm-devel"
+depends=""
+short_desc="A text mode window environment"
+maintainer="Klara Modin <klarasmodin@gmail.com>"
+license="GPL-2.0"
+homepage="https://github.com/cosmos72/${pkgname}"
+distfiles="https://github.com/cosmos72/${pkgname}/archive/v${version}.tar.gz"
+checksum=925c941fb57fd1cb5898c5d4e722d051c9d7522e9b29c2ffa035b6115d4738cd
+
+post_install() {
+	vsconf system.twinrc
+	vlicense COPYING
+	vlicense COPYING.LIB
+}
