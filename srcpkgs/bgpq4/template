@@ -1,0 +1,19 @@
+# Template file for 'bgpq4'
+pkgname=bgpq4
+version=0.0.6
+revision=1
+wrksrc=$pkgname-$version
+build_style=gnu-configure
+hostmakedepends=""
+makedepends="autoconf automake"
+depends=""
+short_desc="A BGP Filter generator"
+maintainer="Klara Modin <klarasmodin@gmail.com>"
+license="GPL-3.0-or-later"
+homepage="https://github.com/bgp/$pkgname"
+distfiles="https://github.com/bgp/$pkgname/archive/0.0.6.tar.gz"
+checksum=612d8eb7c3de07712e43b3e03e3b9d6b9b87e14333e56df3ccf198675a87a642
+
+pre_configure() {
+	./bootstrap
+}
