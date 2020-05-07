@@ -1,7 +1,7 @@
 # Template file for 'ghostscript'
 pkgname=ghostscript
 version=9.52
-revision=1
+revision=2
 short_desc="Interpreter for the PostScript language"
 maintainer="Orphaned <orphan@voidlinux.org>"
 license="AGPL-3.0-or-later, CPL-1.0"
@@ -10,12 +10,9 @@ distfiles="https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/downlo
 checksum=57442acf8b46453a9b5fc6fec738fbbb7e13a3d3e00f1aaaa0975529bc203c7c
 
 hostmakedepends="automake libtool pkg-config"
-makedepends="$(vopt_if cups cups-devel) dbus-devel fontconfig-devel jasper-devel jbig2dec-devel
+makedepends="cups cups-devel dbus-devel fontconfig-devel jasper-devel jbig2dec-devel
  lcms2-devel libXext-devel libXt-devel libopenjpeg2-devel libpaper-devel"
 depends="gsfonts"
-
-build_options="cups"
-build_options_default="cups"
 
 if [ "$CROSS_BUILD" ]; then
 	hostmakedepends+=" ${makedepends}"
@@ -23,7 +20,7 @@ fi
 
 pre_configure() {
 	# force it to use system libs.
-	rm -rf $(vopt_if cups cups/libs) freetype jbig2dec jpeg lcms2mt libpng openjpeg tiff zlib
+	rm -rf cups cups/libs freetype jbig2dec jpeg lcms2mt libpng openjpeg tiff zlib
 
 	# add missing LDFLAGS
 	sed -i 's/-L$(BINDIR)/& $(LDFLAGS)/g' base/unix-dll.mak
@@ -44,7 +41,6 @@ do_configure() {
 		--enable-fontconfig --enable-freetype --enable-openjpeg \
 		--with-libpaper --without-luratech --without-omni \
 		--with-system-libtiff --disable-compile-inits \
-		$(vopt_if cups '' '--disable-cups')
 
 	# configure libijs
 	cd ijs
@@ -62,7 +58,7 @@ do_build() {
 
 do_install() {
 	# install ghostscript
-	make DESTDIR=${DESTDIR} $(vopt_if cups 'cups_serverroot=${DESTDIR}/etc/cups cups_serverbin=${DESTDIR}/usr/lib/cups') install install-so
+	make DESTDIR=${DESTDIR} 'cups_serverroot=${DESTDIR}/etc/cups cups_serverbin=${DESTDIR}/usr/lib/cups' install install-so
 	# install license
 	vlicense LICENSE
 
@@ -74,7 +70,7 @@ do_install() {
 	make DESTDIR=${DESTDIR} install
 
 	# Remove conflicting files with cups-filters.
-	$(vopt_if cups 'rm -f ${DESTDIR}/usr/lib/cups/filter/{gstopxl,gstoraster}')
+	rm -f ${DESTDIR}/usr/lib/cups/filter/{gstopxl,gstoraster}
 
 	cd ..
 	# Install missing file
@@ -100,7 +96,11 @@ ghostscript-devel_package() {
 	depends="libijs>=${version}_${revision} libgs>=${version}_${revision}"
 	short_desc+=" - development files"
 	pkg_install() {
+		rm -rf $DESTDIR/usr/include
+		mkdir $DESTDIR/usr/include
 		vmove usr/include
+		rm -rf $DESTDIR/usr/lib/pkgconfig
+		mkdir $DESTDIR/usr/lib/pkgconfig
 		vmove usr/lib/pkgconfig
 	}
 }
