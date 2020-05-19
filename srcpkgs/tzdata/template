@@ -1,7 +1,7 @@
 # Template file for 'tzdata'
 pkgname=tzdata
 version=2020a
-revision=1
+revision=2
 archs=noarch
 wrksrc=tzdata
 create_wrksrc=yes
@@ -17,10 +17,16 @@ do_install() {
 	local timezones="africa antarctica asia australasia europe northamerica \
 		southamerica pacificnew etcetera backward systemv factory"
 
-	zic -y ./yearistype -d ${DESTDIR}/usr/share/zoneinfo ${timezones}
-	zic -y ./yearistype -d ${DESTDIR}/usr/share/zoneinfo/posix ${timezones}
-	zic -y ./yearistype -d ${DESTDIR}/usr/share/zoneinfo/right -L leapseconds ${timezones}
+	zic -y ./yearistype -d ${DESTDIR}/usr/share/zoneinfo-posix ${timezones}
+	zic -y ./yearistype -d ${DESTDIR}/usr/share/zoneinfo-leap -L leapseconds ${timezones}
+	ln -sr ${DESTDIR}/usr/share/zoneinfo-posix ${DESTDIR}/usr/share/zoneinfo
+	ln -sr ${DESTDIR}/usr/share/zoneinfo-posix ${DESTDIR}/usr/share/zoneinfo-posix/posix
+	ln -sr ${DESTDIR}/usr/share/zoneinfo-leap ${DESTDIR}/usr/share/zoneinfo-posix/right
+	ln -sr ${DESTDIR}/usr/share/zoneinfo-posix ${DESTDIR}/usr/share/zoneinfo-leap/posix
+	ln -sr ${DESTDIR}/usr/share/zoneinfo-leap ${DESTDIR}/usr/share/zoneinfo-leap/right
 
 	zic -y ./yearistype -d ${DESTDIR}/usr/share/zoneinfo -p America/New_York
 	install -m444 -t ${DESTDIR}/usr/share/zoneinfo iso3166.tab zone1970.tab zone.tab
+
+	vcopy leap-seconds.list /usr/share/zoneinfo-leap
 }
