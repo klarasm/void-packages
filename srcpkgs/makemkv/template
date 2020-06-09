@@ -1,0 +1,34 @@
+# Template file for 'makemkv'
+pkgname=makemkv
+version=1.15.1
+revision=1
+archs="i686 x86_64"
+wrksrc="makemkv-oss-$version"
+#create_wrksrc=yes
+build_style=gnu-configure
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends=""
+makedepends="pkgconf ffmpeg-devel qt5-devel libxkbcommon-devel"
+depends=""
+short_desc="DVD and Blu-ray to MKV converter and network streamer"
+maintainer="Klara Modin <klarasmodin@gmail.com>"
+license="LGPL, MPL, custom:makemkv"
+homepage="http://www.makemkv.com/"
+distfiles="https://www.makemkv.com/download/makemkv-oss-1.15.1.tar.gz
+  https://www.makemkv.com/download/makemkv-bin-1.15.1.tar.gz"
+checksum="5e6b3da05a3298a0ac85c674dbde45d5eb36956159deb3207ac23f85a7ffa166
+  80bbd4438c3ce6e95c085a63b9129c919dff865d14cd2b5e58a851da74302631"
+nopie="yes"
+
+post_install() {
+	vlicense License.txt
+	cd ../"$pkgname-bin-$version"
+	mkdir -p tmp
+	echo accepted > tmp/eula_accepted
+	make DESTDIR=$DESTDIR install
+	vlicense src/eula_en_linux.txt
+}
