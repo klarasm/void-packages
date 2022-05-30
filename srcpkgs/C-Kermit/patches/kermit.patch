@@ -1,0 +1,12 @@
+--- a/ckucmd.c	2011-07-14 14:14:37.000000000 +0200
++++ b/ckucmd.c	2022-05-30 17:26:47.662668881 +0200
+@@ -7381,9 +7381,6 @@
+ #else
+ #ifdef NOARROWKEYS
+     debug(F101,"cmdconchk NOARROWKEYS x","",0);
+-#else
+-    debug(F101,"cmdconchk stdin->_cnt","",stdin->_cnt);
+-    x = stdin->_cnt;
+ #endif /* NOARROWKEYS */
+ #endif /* VMS */
+     if (x == 0) x = conchk();
