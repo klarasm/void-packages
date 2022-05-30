@@ -1,0 +1,30 @@
+# Template file for 'C-Kermit'
+pkgname=C-Kermit
+_cversion=400
+_bversion=beta06
+version="10.0.${_cversion}~${_bversion}"
+revision=1
+create_wrksrc=true
+build_style="gnu-makefile"
+makedepends="ncurses-devel ncurses-libtinfo-devel"
+short_desc="Portable Scriptable Network and Serial Communication Software"
+maintainer="Klara Modin <klarasmodin@gmail.com>"
+license="BSD-3-Clause"
+homepage="https://kermitproject.org/"
+distfiles="https://www.kermitproject.org/ftp/kermit/test/tar/cku${_cversion}-${_bversion}.tar.gz"
+checksum=a59e61c5df205198613f225bdee2fe0b23a79b332ec48e29ffe6d24d9906106d
+
+do_extract() {
+	cd $wrksrc
+	bsdtar -xf "${XBPS_SRCDISTDIR}/$pkgname-$version/${distfiles##*/}"
+}
+
+do_build() {
+	make linux
+}
+
+do_install() {
+	vbin wermit kermit
+	vlicense COPYING.TXT
+	vman ckuker.nr kermit.1
+}
