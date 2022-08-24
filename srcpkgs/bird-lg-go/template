@@ -1,0 +1,24 @@
+# Template file for 'bird-lg-go'
+pkgname=bird-lg-go
+version=1.3.2.2
+revision=1
+build_style=gnu-makefile
+hostmakedepends="go"
+short_desc="BIRD looking glass in Go"
+maintainer="Klara Modin <klarasmodin@gmail.com>"
+license="GPL-3.0-only"
+homepage="https://github.com/xddxdd/bird-lg-go"
+distfiles="https://github.com/xddxdd/bird-lg-go/archive/refs/tags/v${version}.tar.gz"
+checksum=b85f3d12f532bcdf5d6f3a2be1aacb91dbb803f5d5aa9e42ba4b4ea47693c86a
+nopie=yes
+
+do_install() {
+	vbin frontend/frontend bird-lg-go
+	vbin proxy/proxy bird-lgproxy-go
+	vsv bird-lg-go
+	vsv bird-lgproxy-go
+	vlicense LICENSE
+	vdoc README.md
+	vdoc docs/API.md
+	vdoc docs/Telegram.md
+}

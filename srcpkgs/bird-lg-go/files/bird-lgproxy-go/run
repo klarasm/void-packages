@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ -r conf ] && . ./conf
+
+exec bird-lgproxy-go --bird /run/bird.ctl $OPTS 2>&1

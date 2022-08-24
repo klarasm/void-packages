@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ -r conf ] && . ./conf
+
+exec bird-lg-go ${TITLE:+--title-brand "$TITLE"} $OPTS 2>&1
