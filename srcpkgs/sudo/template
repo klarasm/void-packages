@@ -6,9 +6,10 @@ build_style=gnu-configure
 configure_args="--with-ignore-dot --with-insults=disabled --with-all-insults --with-env-editor
  --enable-shell-sets-home --enable-noargs-shell --without-sendmail
  --with-logfac=auth --disable-root-mailer --enable-pie --with-mdoc
- --sbindir=/usr/bin --disable-log-server"
+ --sbindir=/usr/bin --disable-log-server $(vopt_with ldap) $(vopt_with sssd)"
 hostmakedepends="groff"
-makedepends="zlib-devel pam-devel"
+makedepends="zlib-devel pam-devel $(vopt_if ldap libldap-devel)
+ $(vopt_if sssd sssd-devel)"
 short_desc="Allow others to run commands as root"
 maintainer="Enno Boland <gottox@voidlinux.org>"
 license="ISC"
@@ -18,6 +19,9 @@ distfiles="https://www.sudo.ws/dist/sudo-${version}.tar.gz"
 checksum=df2004fde4c1033b1fdca339958e0ec633d393d604fcff9d1513abef1f94574d
 conf_files="/etc/pam.d/sudo /etc/sudoers"
 lib32disabled=yes
+build_options="ldap sssd"
+default_build_options=""
+desc_option_sssd="Enable support for sudoers rules through SSSD"
 
 post_configure() {
 	case "$XBPS_TARGET_MACHINE" in
